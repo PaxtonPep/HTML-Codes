@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Currency Calculator</title>
+<style>
+body {
+margin: 0;
+height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: Arial, sans-serif;
+background: linear-gradient(135deg, #1e3c72, #2a5298);
+}
+.card {
+background: #fff;
+padding: 30px;
+border-radius: 18px;
+width: 420px;
+box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+h1 {
+text-align: center;
+margin-bottom: 20px;
+color: #1e3c72;
+}
+label {
+font-weight: bold;
+margin-top: 10px;
+display: block;
+}
+input, select {
+width: 100%;
+padding: 10px;
+margin-top: 5px;
+border-radius: 10px;
+border: 1px solid #ccc;
+font-size: 15px;
+}
+.row {
+display: flex;
+gap: 10px;
+align-items: center;
+margin-top: 10px;
+}
+.swap-btn {
+padding: 10px 14px;
+border-radius: 10px;
+border: none;
+background: #e0e6ff;
+cursor: pointer;
+font-weight: bold;
+color: #1e3c72;
+}
+.convert-btn {
+width: 100%;
+padding: 12px;
+margin-top: 15px;
+border-radius: 10px;
+border: none;
+background: #2a5298;
+color: white;
+font-size: 16px;
+cursor: pointer;
+}
+#result {
+margin-top: 15px;
+font-size: 18px;
+font-weight: bold;
+text-align: center;
+color: #1e3c72;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h1>Currency Calculator</h1>
+
+<label>Amount</label>
+<input id="amount" type="number" value="1" step="0.01">
+
+<label>Convert</label>
+<div class="row">
+<select id="from"></select>
+<button class="swap-btn" id="swap">⇄</button>
+<select id="to"></select>
+</div>
+
+<button class="convert-btn" id="convert">Convert</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+// ⭐ EDIT THESE RATES IN CODE ONLY ⭐
+// "1 unit of currency = X USD"
+const rates = {
+"AUD": 1.39,
+"BRL": 4.98,
+"CAD": 1.37,
+"CHF": 0.78,
+"CNY": 6.82,
+"EUR": 0.85,
+"GBP": 0.74,
+"INR": 92.45,
+"JPY": 158,
+"KRW": 1460.59,
+"MXN": 17.23,
+"NZD": 1.69,
+"SEK": 9.13,
+"USD": 1,
+"ZAR": 16.20
+};
+
+// Full currency names
+const names = {
+"AUD": "Australian Dollar",
+"BRL": "Brazilian Real",
+"CAD": "Canadian Dollar",
+"CHF": "Swiss Franc",
+"CNY": "Chinese Yuan",
+"EUR": "Euro",
+"GBP": "British Pound",
+"INR": "Indian Rupee",
+"JPY": "Japanese Yen",
+"KRW": "South Korean Won",
+"MXN": "Mexican Peso",
+"NZD": "New Zealand Dollar",
+"SEK": "Swedish Krona",
+"USD": "US Dollar",
+"ZAR": "South African Rand"
+};
+
+const currencies = Object.keys(rates).sort();
+
+const fromSel = document.getElementById("from");
+const toSel = document.getElementById("to");
+
+// Build dropdowns with "CODE – Full Name"
+currencies.forEach(c => {
+fromSel.innerHTML += `<option value="${c}">${c} – ${names[c]}</option>`;
+toSel.innerHTML += `<option value="${c}">${c} – ${names[c]}</option>`;
+});
+
+toSel.value = "EUR";
+
+function convert() {
+const amount = parseFloat(document.getElementById("amount").value);
+const from = fromSel.value;
+const to = toSel.value;
+
+const usd = amount / rates[from];
+const final = usd * rates[to];
+
+document.getElementById("result").textContent =
+`${amount} ${from} = ${final.toFixed(2)} ${to}`;
+}
+
+document.getElementById("convert").onclick = convert;
+
+document.getElementById("swap").onclick = () => {
+const temp = fromSel.value;
+fromSel.value = toSel.value;
+toSel.value = temp;
+convert();
+};
+
+convert();
+</script>
+
+</body>
+</html>
